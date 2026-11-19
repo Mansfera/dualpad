@@ -129,7 +129,7 @@ struct InkPill: View {
         let ink: Color = scheme == .dark ? Brand.ink : .white
         Button(action: action) {
             HStack(spacing: 10) {
-                Text(title).font(Brand.text(12, .medium))
+                Text(title).font(Brand.text(12, .medium)).lineLimit(1).fixedSize()
                 ZStack {
                     Circle().fill(ink)
                     Image(systemName: symbol).font(.system(size: 9, weight: .bold)).foregroundStyle(fill)

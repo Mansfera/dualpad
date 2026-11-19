@@ -77,20 +77,23 @@ struct UpdateBanner: View {
     var body: some View {
         if let release = updates.available {
             Panel {
-                HStack(spacing: 10) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("DualPad \(release.version) is out").font(Brand.text(12.5, .medium))
-                        Text(updates.homebrew ? "Installed with Homebrew: update with brew so it keeps track."
-                                              : "You have \(updates.current).")
-                            .font(Brand.text(10.5)).foregroundStyle(pal.muted)
-                            .fixedSize(horizontal: false, vertical: true)
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(alignment: .top, spacing: 10) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("DualPad \(release.version) is out").font(Brand.text(12.5, .medium))
+                            Text(updates.homebrew ? "Installed with Homebrew: update with brew so it keeps track."
+                                                  : "You have \(updates.current).")
+                                .font(Brand.text(10.5)).foregroundStyle(pal.muted)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture { NSWorkspace.shared.open(release.url) }
+                        .help("Open the release page")
+                        Spacer(minLength: 6)
+                        RoundIconButton(symbol: "xmark", help: "Hide until the next version") { updates.dismissBanner() }
                     }
-                    .contentShape(Rectangle())
-                    .onTapGesture { NSWorkspace.shared.open(release.url) }
-                    .help("Open the release page")
-                    Spacer()
                     if updates.homebrew {
-                        InkPill(title: copied ? "Copied" : "Copy brew command", symbol: copied ? "checkmark" : "doc.on.doc") {
+                        InkPill(title: copied ? "Copied" : "Copy command", symbol: copied ? "checkmark" : "doc.on.doc") {
                             NSPasteboard.general.clearContents()
                             NSPasteboard.general.setString(UpdatePolicy.brewCommand, forType: .string)
                             copied = true
@@ -101,7 +104,6 @@ struct UpdateBanner: View {
                             NSWorkspace.shared.open(release.dmgURL ?? release.url)
                         }
                     }
-                    RoundIconButton(symbol: "xmark", help: "Hide until the next version") { updates.dismissBanner() }
                 }
             }
         }

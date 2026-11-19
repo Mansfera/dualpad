@@ -10,6 +10,7 @@ enum Render {
         Brand.registerFonts()
         let model = PadModel()
         model.start()
+        UpdateChecker.shared.check() // with SIMULATE_VERSION, the update banner shows up in the render
         // Let the controller connect and the stats measure a second of input.
         RunLoop.main.run(until: Date().addingTimeInterval(0.5))
         model.popoverShown = true
