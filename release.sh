@@ -24,6 +24,7 @@ ditto build/DualPad.app build/dmg/DualPad.app
 ln -s /Applications build/dmg/Applications
 DMG="dist/DualPad-$V.dmg"
 hdiutil create -volname "DualPad" -srcfolder build/dmg -ov -format UDZO "$DMG" >/dev/null
+rm -rf build/dmg  # the staging copy of the app is only needed inside the DMG
 SHA=$(shasum -a 256 "$DMG" | cut -d' ' -f1)
 echo "DMG $DMG  sha256 $SHA"
 
@@ -41,4 +42,5 @@ sed -e "s/__VERSION__/$V/" -e "s/__SHA256__/$SHA/" Homebrew/dualpad.rb > "$TAP/C
 git -C "$TAP" add Casks/dualpad.rb
 git -C "$TAP" commit -q -m "dualpad $V"
 git -C "$TAP" push -q
+rm -rf "$TAP"
 echo "Released $V: brew install --cask mansfera/tap/dualpad"
